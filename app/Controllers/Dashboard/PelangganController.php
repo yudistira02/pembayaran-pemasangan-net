@@ -22,20 +22,20 @@ class PelangganController extends BaseController
         $this->paketModel = new Paket();
         $this->jadwalModel = new Jadwal();
     }
-    
+
     public function createTagihanBulanan($id)
     {
         $pelanggan = $this->pelangganModel->find($id);
         $transaksi = $this->transaksiModel
-                        ->where('pelanggan_id', $id)
-                        ->where('kategori_pembayaran', 'bulanan')
-                        ->where('status', '0')
-                        ->first();
+            ->where('pelanggan_id', $id)
+            ->where('kategori_pembayaran', 'bulanan')
+            ->where('status', '0')
+            ->first();
 
-        if($transaksi) {
+        if ($transaksi) {
             return redirect()->to('dashboard/pelanggan')->with('error', 'Gagal tambah tagihan, pelanggan sudah ada tagihan bulanan');
         }
-                
+
         $paket = $this->paketModel->find($pelanggan['paket']);
         $data = [
             'pelanggan_id' => $pelanggan['id'],
@@ -48,7 +48,7 @@ class PelangganController extends BaseController
         $create = $this->transaksiModel->insert($data);
 
 
-        if(!$create) {
+        if (!$create) {
             return redirect()->to('dashboard/pelanggan')->with('error', 'Gagal tambah tagihan');
         }
         return redirect()->to('dashboard/pelanggan')->with('success', 'Berhasil tambah tagihan');
@@ -57,20 +57,20 @@ class PelangganController extends BaseController
     public function index()
     {
         return view('dashboard/pelanggan/index', [
-        //dd([
+            //dd([
             'title' => 'Pelanggan',
             'data' => $this->pelangganModel
-                                    ->select('
+                ->select('
                                         pelanggan.*,
                                         users.name as nama,
                                         users.email as email,
                                         paket.nama as nama_paket,
                                         paket.kecepatan as kecepatan_paket
                                     ')
-                                    ->join('paket', 'pelanggan.paket = paket.id')
-                                    ->join('users', 'pelanggan.user_id = users.id')
-                                    ->get()
-                                    ->getResultArray()
+                ->join('paket', 'pelanggan.paket = paket.id')
+                ->join('users', 'pelanggan.user_id = users.id')
+                ->get()
+                ->getResultArray()
         ]);
     }
 
@@ -89,14 +89,14 @@ class PelangganController extends BaseController
 
             $update = $this->pelangganModel->update($id, $data);
 
-            if(!$update) {
+            if (!$update) {
                 return redirect()->to('dashboard/pelanggan')->with('error', 'Gagal update pelanggan');
             }
             return redirect()->to('dashboard/pelanggan')->with('success', 'Berhasil update pelanggan');
         }
 
         return view('dashboard/pelanggan/update', [
-        //dd([
+            //dd([
             'title' => 'Pelanggan',
             'data' => $this->pelangganModel->where('id', $id)->first()
         ]);
@@ -131,7 +131,7 @@ class PelangganController extends BaseController
                 'foto_diri' => $newName,
                 'status' => '0',
             ];
-            
+
             $create = $this->pelangganModel->insert($data);
 
             //dd($create);
@@ -149,7 +149,7 @@ class PelangganController extends BaseController
                     'kategori_pembayaran' => 'pasang_baru',
                     'type_pembayaran' => $this->request->getPost('type_pembayaran'),
                 ];
-    
+
                 $transaksi = $this->transaksiModel->insert($data_transaksi);
 
                 if (!$transaksi) {
@@ -158,6 +158,16 @@ class PelangganController extends BaseController
             }
 
             if ($this->request->getPost('type_pembayaran') === '0') {
+                $pelanggan = $this->pelangganModel->where('user_id', $id)->first();
+                $data_paket = $this->paketModel->find($data['paket']);
+                $data_transaksi = [
+                    'pelanggan_id' => $pelanggan['id'],
+                    'total' => $data_paket['harga'] + 2000,
+                    'status' => '0',
+                    'kategori_pembayaran' => 'pasang_baru',
+                    'type_pembayaran' => $this->request->getPost('type_pembayaran'),
+                ];
+
                 $data_jadwal = [
                     'pelanggan_id' => $pelanggan['id'],
                     'ticket_id' => null,
@@ -167,6 +177,7 @@ class PelangganController extends BaseController
                     'status' => '0',
                 ];
 
+                $this->transaksiModel->insert($data_transaksi);
                 $this->jadwalModel->insert($data_jadwal);
             }
 
