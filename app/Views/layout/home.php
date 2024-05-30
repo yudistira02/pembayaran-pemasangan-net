@@ -1,5 +1,6 @@
 <!DOCTYPE html>
 <html lang="en">
+
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
@@ -14,8 +15,9 @@
     <!-- Link to FancyBox JavaScript -->
     <script src="https://cdnjs.cloudflare.com/ajax/libs/fancybox/3.5.7/jquery.fancybox.min.js"></script>
 </head>
+
 <body class="bg-[#5AB2FF]">
-    <main>  
+    <main>
         <?= $this->include('layout/partials/navbar_home') ?>
         <div class="py-10 px-32 text-white">
             <?= $this->renderSection('content') ?>
@@ -27,9 +29,50 @@
         </div>
     </main>
     <script src="https://code.jquery.com/jquery-3.6.0.min.js"></script>
+    <script src="<?= base_url('assets/js/app.js') ?>"></script>
+    <script src="https://cdn.jsdelivr.net/npm/sweetalert2@11"></script>
     <script src="https://kit.fontawesome.com/8ef7ea110e.js" crossorigin="anonymous"></script>
     <script src="https://unpkg.com/leaflet@1.9.4/dist/leaflet.js" integrity="sha256-20nQCchB9co0qIjJZRGuk2/Z9VM+kNiyxNV1lvTlZBo=" crossorigin=""></script>
     <script>
+        $(document).ready(function() {
+            $('#logout').on('click', function(event) {
+                event.preventDefault();
+
+                Swal.fire({
+                    title: 'Anda Yakin Ingin Keluar? ',
+                    text: "Anda Akan Keluar Dari Halaman ini",
+                    icon: 'warning',
+                    showCancelButton: true,
+                    confirmButtonColor: '#3085d6',
+                    cancelButtonColor: '#d33',
+                    confirmButtonText: 'Yes, Keluar!'
+                }).then((result) => {
+                    if (result.isConfirmed) {
+                        $.ajax({
+                            url: `${BASE_URL}dashboard/logout`,
+                            type: 'GET',
+                            success: function(response) {
+                                Swal.fire(
+                                    'Berhasil Keluar!!',
+                                    'Anda Sudah Keluar!',
+                                    'success'
+                                ).then(() => {
+                                    window.location.href = `${BASE_URL}login`;
+                                });
+                            },
+                            error: function(xhr, status, error) {
+                                Swal.fire(
+                                    'Error!',
+                                    'Logout failed: ' + error,
+                                    'error'
+                                );
+                            }
+                        });
+                    }
+                });
+            });
+        });
+
         window.addEventListener('scroll', function() {
             const navbar = document.getElementById('navbar');
             if (window.scrollY > 0) {
@@ -41,4 +84,5 @@
     </script>
     <?= $this->renderSection('script') ?>
 </body>
+
 </html>

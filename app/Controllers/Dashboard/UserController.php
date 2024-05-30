@@ -25,17 +25,17 @@ class UserController extends BaseController
         $this->pelangganModel = new Pelanggan();
         $this->ticketModel = new Ticket();
     }
-    
+
     public function index()
     {
         return view('dashboard/user/index', [
-        //dd([
+            //dd([
             'title' => 'User',
             'data' => $this->userModel->where('id !=', session()->get('id'))->get()->getResultArray(),
         ]);
     }
 
-    public function create() 
+    public function create()
     {
         if ($this->request->getMethod() === 'POST') {
             $password = $this->request->getPost('password');
@@ -77,7 +77,7 @@ class UserController extends BaseController
 
             $update = $this->userModel->update($id, $data);
 
-            if(!$update) {
+            if (!$update) {
                 return redirect()->to('dashboard/user')->with('error', 'Gagal update user');
             }
             return redirect()->to('dashboard/user')->with('success', 'Berhasil update user');
@@ -85,28 +85,38 @@ class UserController extends BaseController
 
         return view('dashboard/user/update', [
             'title' => 'User',
-            'data' => $this->userModel->where('id' ,$id)->first()
+            'data' => $this->userModel->where('id', $id)->first()
         ]);
     }
 
     public function delete($id)
     {
+        $responseSuccess = [
+            'status' => 'success',
+            'message' => 'Berhasil Menghapus user'
+        ];
+
+        $reponseError = [
+            'status' => 'error',
+            'message' => 'Gagal Menghapus user'
+        ];
+
         $user = $this->userModel->find($id);
         if ($user && $user['usertype'] === 'admin') {
             $delete = $this->userModel->delete($id);
             if ($delete) {
-                return redirect()->to('dashboard/user')->with('success', 'Berhasil delete user');
+                return $this->response->setJSON($responseSuccess);
             } else {
-                return redirect()->to('dashboard/user')->with('error', 'Gagal delete user');
+                return $this->response->setJSON($reponseError);
             }
         }
 
         if ($user && $user['usertype'] === 'teknisi') {
             $this->deleteInBatches($this->jadwalModel, 'teknisi_id', $id);
             if ($this->userModel->delete($id)) {
-                return redirect()->to('dashboard/user')->with('success', 'Berhasil delete user');
+                return $this->response->setJSON($responseSuccess);
             } else {
-                return redirect()->to('dashboard/user')->with('error', 'Gagal delete user');
+                return $this->response->setJSON($reponseError);
             }
         }
 
@@ -117,17 +127,17 @@ class UserController extends BaseController
                 $this->deleteInBatches($this->ticketModel, 'id_pelanggan', $findPelanggan['id']);
                 $this->deleteInBatches($this->transaksiModel, 'pelanggan_id', $findPelanggan['id']);
                 $this->pelangganModel->delete($findPelanggan['id']);
-    
+
                 if ($this->userModel->delete($id)) {
-                    return redirect()->to('dashboard/user')->with('success', 'Berhasil delete user');
+                    return $this->response->setJSON($responseSuccess);
                 } else {
-                    return redirect()->to('dashboard/user')->with('error', 'Gagal delete user');
+                    return $this->response->setJSON($reponseError);
                 }
             } else {
                 if ($this->userModel->delete($id)) {
-                    return redirect()->to('dashboard/user')->with('success', 'Berhasil delete user');
+                    return $this->response->setJSON($responseSuccess);
                 } else {
-                    return redirect()->to('dashboard/user')->with('error', 'Gagal delete user');
+                    return $this->response->setJSON($reponseError);
                 }
             }
         }

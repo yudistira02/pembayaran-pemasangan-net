@@ -1,3 +1,4 @@
+const BASE_URL = 'http://localhost:8080/'
 function enlargeImage(imageUrl) {
     var modal = document.createElement('div');
     modal.classList.add('fixed', 'top-0', 'left-0', 'w-full', 'h-full', 'bg-black', 'bg-opacity-75', 'flex', 'justify-center', 'items-center', 'z-50');

@@ -32,8 +32,49 @@
     <script src="https://code.jquery.com/jquery-3.6.0.min.js"></script>
     <script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
     <script src="<?= base_url('assets/js/app.js') ?>"></script>
+    <script src="https://cdn.jsdelivr.net/npm/sweetalert2@11"></script>
     <script src="https://cdn.datatables.net/2.0.7/js/dataTables.js"></script>
     <script src="https://unpkg.com/leaflet@1.9.4/dist/leaflet.js" integrity="sha256-20nQCchB9co0qIjJZRGuk2/Z9VM+kNiyxNV1lvTlZBo=" crossorigin=""></script>
+    <script>
+        $(document).ready(function() {
+            $('#logout').on('click', function(event) {
+                event.preventDefault();
+
+                Swal.fire({
+                    title: 'Anda yakin keluar?',
+                    text: "Pastikan Pekerjaan Anda Sudah Selesai",
+                    icon: 'warning',
+                    showCancelButton: true,
+                    confirmButtonColor: '#3085d6',
+                    cancelButtonColor: '#d33',
+                    confirmButtonText: 'Yes, Keluar!!'
+                }).then((result) => {
+                    if (result.isConfirmed) {
+                        $.ajax({
+                            url: `${BASE_URL}dashboard/logout`,
+                            type: 'GET',
+                            success: function(response) {
+                                Swal.fire(
+                                    'Keluar!!',
+                                    'Berhasil Keluar!',
+                                    'success'
+                                ).then(() => {
+                                    window.location.href = `${BASE_URL}login`;
+                                });
+                            },
+                            error: function(xhr, status, error) {
+                                Swal.fire(
+                                    'Error!',
+                                    'Logout failed: ' + error,
+                                    'error'
+                                );
+                            }
+                        });
+                    }
+                });
+            });
+        });
+    </script>
     <?= $this->renderSection('script') ?>
 </body>
 

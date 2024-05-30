@@ -1,12 +1,5 @@
 <div class="flex" x-data="{ open: true }">
-    <div class="p-5 min-h-screen w-[250px] bg-gray-800 text-white"
-         x-show="open" 
-         x-transition:enter="transition-transform ease-out duration-300 transform"
-         x-transition:enter-start="translate-x-[-250px]"
-         x-transition:enter-end="translate-x-0"
-         x-transition:leave="transition-transform ease-in duration-300 transform"
-         x-transition:leave-start="translate-x-0"
-         x-transition:leave-end="translate-x-[-250px]">
+    <div class="p-5 min-h-screen w-[250px] bg-gray-800 text-white" x-show="open" x-transition:enter="transition-transform ease-out duration-300 transform" x-transition:enter-start="translate-x-[-250px]" x-transition:enter-end="translate-x-0" x-transition:leave="transition-transform ease-in duration-300 transform" x-transition:leave-start="translate-x-0" x-transition:leave-end="translate-x-[-250px]">
         <div class="flex justify-center items-center mb-10">
             <div>
                 <a href="<?= base_url('dashboard') ?>" class="font-bold text-2xl">
@@ -25,7 +18,7 @@
                         <path stroke-linecap="round" stroke-linejoin="round" d="m4.5 15.75 7.5-7.5 7.5 7.5" />
                     </svg>
                 </div>
-                <a href="<?= base_url('dashboard/profile/'.session()->id ) ?>" class="font-semibold">
+                <a href="<?= base_url('dashboard/profile/' . session()->id) ?>" class="font-semibold">
                     <div class="rounded-lg transition-colors duration-300 hover:bg-sky-600 bg-sky-500 p-2 mt-5 flex justify-between items-center text-white" x-show="open" x-transition>
                         Account
                         <svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" stroke-width="1.5" stroke="currentColor" class="w-6 h-6">
@@ -33,7 +26,7 @@
                         </svg>
                     </div>
                 </a>
-                    <a href="<?= base_url('dashboard/logout') ?>" class="font-semibold">
+                <a href="#" class="font-semibold" id="logout">
                     <div class="rounded-lg transition-colors duration-300 hover:bg-red-600 bg-red-500 p-2 mt-2 flex justify-between items-center text-white" x-show="open" x-transition>
                         Logout
                         <svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" stroke-width="1.5" stroke="currentColor" class="w-6 h-6">
@@ -43,33 +36,33 @@
                 </a>
             </div>
         </div>
-        <div class="flex justify-center items-center py-10">              
+        <div class="flex justify-center items-center py-10">
             <ul class="block text-medium font-semibold w-full" x-data="{ open: false }">
                 <a href="<?= base_url('dashboard') ?>">
                     <li class="hover:bg-white hover:text-gray-800 transition-colors duration-300 p-3 my-2 <?= (current_url() === base_url('dashboard')) ? 'bg-gray-700' : ''; ?> rounded-lg flex justify-start items-center">
                         <svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" stroke-width="1.5" stroke="currentColor" class="w-5 h-5 mr-3">
                             <path stroke-linecap="round" stroke-linejoin="round" d="m2.25 12 8.954-8.955c.44-.439 1.152-.439 1.591 0L21.75 12M4.5 9.75v10.125c0 .621.504 1.125 1.125 1.125H9.75v-4.875c0-.621.504-1.125 1.125-1.125h2.25c.621 0 1.125.504 1.125 1.125V21h4.125c.621 0 1.125-.504 1.125-1.125V9.75M8.25 21h8.25" />
                         </svg>
-                            Dashboard
+                        Dashboard
                     </li>
                 </a>
-                <?php if(session()->userType === 'teknisi'): ?>
+                <?php if (session()->userType === 'teknisi') : ?>
                     <a href="<?= base_url('dashboard/jadwal') ?>">
                         <li class="hover:bg-white hover:text-gray-800 transition-colors duration-300 p-3 my-2 <?= (current_url() === base_url('dashboard/jadwal')) ? 'bg-gray-700' : ''; ?> rounded-lg flex justify-start items-center">
                             <svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" stroke-width="1.5" stroke="currentColor" class="w-5 h-5 mr-3">
                                 <path stroke-linecap="round" stroke-linejoin="round" d="M6.75 3v2.25M17.25 3v2.25M3 18.75V7.5a2.25 2.25 0 0 1 2.25-2.25h13.5A2.25 2.25 0 0 1 21 7.5v11.25m-18 0A2.25 2.25 0 0 0 5.25 21h13.5A2.25 2.25 0 0 0 21 18.75m-18 0v-7.5A2.25 2.25 0 0 1 5.25 9h13.5A2.25 2.25 0 0 1 21 11.25v7.5m-9-6h.008v.008H12v-.008ZM12 15h.008v.008H12V15Zm0 2.25h.008v.008H12v-.008ZM9.75 15h.008v.008H9.75V15Zm0 2.25h.008v.008H9.75v-.008ZM7.5 15h.008v.008H7.5V15Zm0 2.25h.008v.008H7.5v-.008Zm6.75-4.5h.008v.008h-.008v-.008Zm0 2.25h.008v.008h-.008V15Zm0 2.25h.008v.008h-.008v-.008Zm2.25-4.5h.008v.008H16.5v-.008Zm0 2.25h.008v.008H16.5V15Z" />
                             </svg>
-                                Jadwal
+                            Jadwal
                         </li>
                     </a>
-                    <?php endif ?>
-                    <?php if(session()->userType === 'admin'): ?>
+                <?php endif ?>
+                <?php if (session()->userType === 'admin') : ?>
                     <a href="<?= base_url('dashboard/jadwal') ?>">
                         <li class="hover:bg-white hover:text-gray-800 transition-colors duration-300 p-3 my-2 <?= (current_url() === base_url('dashboard/jadwal')) ? 'bg-gray-700' : ''; ?> rounded-lg flex justify-start items-center">
                             <svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" stroke-width="1.5" stroke="currentColor" class="w-5 h-5 mr-3">
                                 <path stroke-linecap="round" stroke-linejoin="round" d="M6.75 3v2.25M17.25 3v2.25M3 18.75V7.5a2.25 2.25 0 0 1 2.25-2.25h13.5A2.25 2.25 0 0 1 21 7.5v11.25m-18 0A2.25 2.25 0 0 0 5.25 21h13.5A2.25 2.25 0 0 0 21 18.75m-18 0v-7.5A2.25 2.25 0 0 1 5.25 9h13.5A2.25 2.25 0 0 1 21 11.25v7.5m-9-6h.008v.008H12v-.008ZM12 15h.008v.008H12V15Zm0 2.25h.008v.008H12v-.008ZM9.75 15h.008v.008H9.75V15Zm0 2.25h.008v.008H9.75v-.008ZM7.5 15h.008v.008H7.5V15Zm0 2.25h.008v.008H7.5v-.008Zm6.75-4.5h.008v.008h-.008v-.008Zm0 2.25h.008v.008h-.008V15Zm0 2.25h.008v.008h-.008v-.008Zm2.25-4.5h.008v.008H16.5v-.008Zm0 2.25h.008v.008H16.5V15Z" />
                             </svg>
-                                Jadwal
+                            Jadwal
                         </li>
                     </a>
                     <li x-data="{ open: false }" class="relative">
@@ -100,7 +93,7 @@
                             <svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" stroke-width="1.5" stroke="currentColor" class="w-5 h-5 mr-3">
                                 <path stroke-linecap="round" stroke-linejoin="round" d="M3 7.5 7.5 3m0 0L12 7.5M7.5 3v13.5m13.5 0L16.5 21m0 0L12 16.5m4.5 4.5V7.5" />
                             </svg>
-                                Transaksi
+                            Transaksi
                         </li>
                     </a>
                     <a href="<?= base_url('dashboard/laporan') ?>">
@@ -108,7 +101,7 @@
                             <svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" stroke-width="1.5" stroke="currentColor" class="w-5 h-5 mr-3">
                                 <path stroke-linecap="round" stroke-linejoin="round" d="M12 9v3.75m-9.303 3.376c-.866 1.5.217 3.374 1.948 3.374h14.71c1.73 0 2.813-1.874 1.948-3.374L13.949 3.378c-.866-1.5-3.032-1.5-3.898 0L2.697 16.126ZM12 15.75h.007v.008H12v-.008Z" />
                             </svg>
-                                Laporan
+                            Laporan
                         </li>
                     </a>
                     <a href="<?= base_url('dashboard/paket') ?>">
@@ -116,7 +109,7 @@
                             <svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" stroke-width="1.5" stroke="currentColor" class="w-5 h-5 mr-3">
                                 <path stroke-linecap="round" stroke-linejoin="round" d="m21 7.5-9-5.25L3 7.5m18 0-9 5.25m9-5.25v9l-9 5.25M3 7.5l9 5.25M3 7.5v9l9 5.25m0-9v9" />
                             </svg>
-                                Paket
+                            Paket
                         </li>
                     </a>
                     <a href="<?= base_url('dashboard/pelanggan') ?>">
@@ -124,7 +117,7 @@
                             <svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" stroke-width="1.5" stroke="currentColor" class="w-5 h-5 mr-3">
                                 <path stroke-linecap="round" stroke-linejoin="round" d="M18 18.72a9.094 9.094 0 0 0 3.741-.479 3 3 0 0 0-4.682-2.72m.94 3.198.001.031c0 .225-.012.447-.037.666A11.944 11.944 0 0 1 12 21c-2.17 0-4.207-.576-5.963-1.584A6.062 6.062 0 0 1 6 18.719m12 0a5.971 5.971 0 0 0-.941-3.197m0 0A5.995 5.995 0 0 0 12 12.75a5.995 5.995 0 0 0-5.058 2.772m0 0a3 3 0 0 0-4.681 2.72 8.986 8.986 0 0 0 3.74.477m.94-3.197a5.971 5.971 0 0 0-.94 3.197M15 6.75a3 3 0 1 1-6 0 3 3 0 0 1 6 0Zm6 3a2.25 2.25 0 1 1-4.5 0 2.25 2.25 0 0 1 4.5 0Zm-13.5 0a2.25 2.25 0 1 1-4.5 0 2.25 2.25 0 0 1 4.5 0Z" />
                             </svg>
-                                Pelanggan
+                            Pelanggan
                         </li>
                     </a>
                     <a href="<?= base_url('dashboard/user') ?>">
@@ -132,11 +125,11 @@
                             <svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" stroke-width="1.5" stroke="currentColor" class="w-5 h-5 mr-3">
                                 <path stroke-linecap="round" stroke-linejoin="round" d="M15 19.128a9.38 9.38 0 0 0 2.625.372 9.337 9.337 0 0 0 4.121-.952 4.125 4.125 0 0 0-7.533-2.493M15 19.128v-.003c0-1.113-.285-2.16-.786-3.07M15 19.128v.106A12.318 12.318 0 0 1 8.624 21c-2.331 0-4.512-.645-6.374-1.766l-.001-.109a6.375 6.375 0 0 1 11.964-3.07M12 6.375a3.375 3.375 0 1 1-6.75 0 3.375 3.375 0 0 1 6.75 0Zm8.25 2.25a2.625 2.625 0 1 1-5.25 0 2.625 2.625 0 0 1 5.25 0Z" />
                             </svg>
-                                User
+                            User
                         </li>
                     </a>
-                <?php endif ?>                            
-            </ul>                
+                <?php endif ?>
+            </ul>
         </div>
     </div>
     <div class="min-h-screen flex justify-center items-center">

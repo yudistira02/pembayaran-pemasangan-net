@@ -29,19 +29,24 @@ class AuthController extends BaseController
                 if ($user && password_verify($password, $user['password'])) {
                     $checkPelangganOrNot = $this->pelangganModel->where('user_id', $user['id'])->first();
                     session()->set([
-                        'isLoggedIn' => true, 
-                        'userType' => $user['usertype'], 
+                        'isLoggedIn' => true,
+                        'userType' => $user['usertype'],
                         'name' => $user['name'],
                         'email' => $user['email'],
                         'id' => $user['id'],
                         'pelanggan' => $checkPelangganOrNot ? true : false,
                     ]);
 
-                    return redirect()->to($checkPelangganOrNot ? '/' :'/dashboard');
+                    $response = [
+                        'status' => 'success',
+                        'message' => 'Berhasil login!',
+                        'redirect' => $checkPelangganOrNot ? '/' : '/dashboard',
+                    ];
+                    return $this->response->setJSON($response);
                 }
             }
 
-            return redirect()->back()->with('error', 'Invalid email or password.');
+            return $this->response->setJSON(['status' => 'error', 'message' => 'Invalid email or password.']);
         }
 
         return view('auth/login');
@@ -57,12 +62,26 @@ class AuthController extends BaseController
                 'usertype' => 'pelanggan',
             ];
 
-            if ($this->userModel->insert($userData)) {
-                return redirect()->to('/login')->with('success', 'Berhasil daftar, silahkan login!');
+            $findEmail = $this->userModel->where('email', $userData['email'])->first();
+            if ($findEmail) {
+                return $this->response->setJSON([
+                    'status' => 'error',
+                    'message' => 'Email sudah terdaftar!'
+                ]);
             }
 
-            session()->setFlashdata('error', 'Failed to register user.');
-            return redirect()->to('/register');
+            if ($this->userModel->insert($userData)) {
+                return $this->response->setJSON([
+                    'status' => 'success',
+                    'message' => 'Berhasil daftar, silahkan login!',
+                    'redirect' => '/login'
+                ]);
+            }
+
+            return $this->response->setJSON([
+                'status' => 'error',
+                'message' => 'Gagal daftar!'
+            ]);
         }
 
         return view('auth/register');
@@ -71,6 +90,12 @@ class AuthController extends BaseController
     public function logout()
     {
         session()->destroy();
-        return redirect()->to('/login')->with('success', 'Berhasil logout!');
+
+        return $this->response->setJSON([
+            'status' => true,
+            'icon' => 'success',
+            'title' => 'Success!',
+            'text' => 'Logout berhasil.'
+        ]);
     }
 }
