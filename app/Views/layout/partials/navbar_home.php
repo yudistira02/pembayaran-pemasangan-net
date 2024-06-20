@@ -61,7 +61,7 @@
                                         </div>
                                     </a>
                                     <a href="<?= base_url('home/transaksi/saya/' . session()->id) ?>" class="font-semibold">
-                                        <div class="rounded-lg transition-colors duration-300 hover:bg-gray-600 bg-gray-700 p-2 mt-5 flex justify-between items-center text-white">
+                                        <div class="rounded-lg transition-colors duration-300 hover:bg-gray-600 bg-gray-700 p-2 mt-3 flex justify-between items-center text-white">
                                             Transaksi Saya
                                             <svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" stroke-width="1.5" stroke="currentColor" class="ml-10 w-6 h-6">
                                                 <path stroke-linecap="round" stroke-linejoin="round" d="M3 7.5 7.5 3m0 0L12 7.5M7.5 3v13.5m13.5 0L16.5 21m0 0L12 16.5m4.5 4.5V7.5" />

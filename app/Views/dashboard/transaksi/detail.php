@@ -61,7 +61,12 @@
                 url: '<?= base_url('dashboard/transaksi/detail/'.$data['id']) ?>',
                 method: 'POST',
                 success: function(response) {
-                    alert(response)
+                    Swal.fire({
+                            title: 'Success!',
+                            text: response.message,
+                            icon: 'success',
+                            confirmButtonText: 'OK'
+                        })
                     location.reload()
                 },
                 error: function(xhr, status, error) {
