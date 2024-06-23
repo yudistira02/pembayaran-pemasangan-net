@@ -65,6 +65,7 @@
                             Jadwal
                         </li>
                     </a>
+                    <!--
                     <li x-data="{ open: false }" class="relative">
                         <a href="#" class="hover:bg-white hover:text-gray-700 flex items-center p-2 rounded-lg group" @click="open = !open">
                             <svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" stroke-width="1.5" stroke="currentColor" class="w-6 h-6 transition duration-75">
@@ -88,6 +89,7 @@
                             </li>
                         </ul>
                     </li>
+                    -->
                     <a href="<?= base_url('dashboard/transaksi') ?>">
                         <li class="hover:bg-white hover:text-gray-800 transition-colors duration-300 p-3 my-2 <?= (current_url() === base_url('dashboard/transaksi')) ? 'bg-gray-700' : ''; ?> rounded-lg flex justify-start items-center">
                             <svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" stroke-width="1.5" stroke="currentColor" class="w-5 h-5 mr-3">

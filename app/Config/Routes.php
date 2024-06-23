@@ -87,6 +87,7 @@ $routes->group('dashboard', ['filter' => 'isAuthenticated', 'filter' => 'isAuthe
         $routes->match(['GET', 'POST'], 'detail/(:num)', 'Dashboard\TransaksiController::detail/$1');
         $routes->match(['GET'], '/', 'Dashboard\TransaksiController::index');
         $routes->match(['GET'], 'delete/(:num)', 'Dashboard\TransaksiController::delete/$1');
+        $routes->post('export', 'Dashboard\TransaksiController::export');
     });
     $routes->group('user', ['filter' => 'isAuthenticatedAs:admin'], function($routes) {
         $routes->match(['GET'], '/', 'Dashboard\UserController::index');

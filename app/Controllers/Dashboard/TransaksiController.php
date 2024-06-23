@@ -8,6 +8,10 @@ use App\Models\Pelanggan;
 use App\Models\Jadwal;
 use Midtrans\Config;
 use Midtrans\Snap;
+use PhpOffice\PhpSpreadsheet\Spreadsheet;
+use PhpOffice\PhpSpreadsheet\Writer\Xlsx;
+use Dompdf\Dompdf;
+use Dompdf\Options;
 
 class TransaksiController extends BaseController
 {
@@ -20,6 +24,87 @@ class TransaksiController extends BaseController
         $this->transaksiModel = new Transaksi();
         $this->pelangganModel = new Pelanggan();
         $this->jadwalModel = new Jadwal();
+    }
+
+    public function export()
+    {
+        $startDate = $this->request->getPost('startDate');
+        $endDate = $this->request->getPost('endDate');
+        $format = $this->request->getPost('format');
+
+        if (empty($startDate) || empty($endDate)) {
+            return redirect()->back()->with('error', 'Please select both start and end dates.');
+        }
+
+        $transaksiModel = new Transaksi();
+        $data = $transaksiModel->select('
+                                    transaksi.*, 
+                                    pelanggan.id as id_pelanggan,
+                                    pelanggan.alamat as alamat, 
+                                    users.name as name,
+                                ')
+                                ->join('pelanggan', 'pelanggan.id = transaksi.pelanggan_id')
+                                ->join('users', 'users.id = pelanggan.user_id')
+                                ->where('transaksi.created_at >=', $startDate)
+                                ->where('transaksi.created_at <=', $endDate)
+                                ->findAll();
+
+        if ($format == 'pdf') {
+            $this->exportPdf($data);
+        } elseif ($format == 'excel') {
+            $this->exportExcel($data);
+        } else {
+            return redirect()->back()->with('error', 'Invalid export format.');
+        }
+    }
+
+    private function exportPdf($data)
+    {
+        $options = new Options();
+        $options->set('isHtml5ParserEnabled', true);
+        $options->set('isPhpEnabled', true);
+        $dompdf = new Dompdf($options);
+
+        $html = view('dashboard/transaksi/pdf_report', ['data' => $data]);
+
+        $dompdf->loadHtml($html);
+
+        $dompdf->render();
+
+        $dompdf->stream('laporan_transaksi.pdf', array('Attachment' => 0));
+    }
+
+    private function exportExcel($data)
+    {
+        $spreadsheet = new Spreadsheet();
+        $sheet = $spreadsheet->getActiveSheet();
+
+        $sheet->setCellValue('A1', 'Nama Pelanggan');
+        $sheet->setCellValue('B1', 'Alamat');
+        $sheet->setCellValue('C1', 'Kategori Pembayaran');
+        $sheet->setCellValue('D1', 'Tipe Pembayaran');
+        $sheet->setCellValue('E1', 'Total');
+        $sheet->setCellValue('F1', 'Status');
+
+        $row = 2;
+        foreach ($data as $item) {
+            $sheet->setCellValue('A' . $row, $item['name']);
+            $sheet->setCellValue('B' . $row, $item['alamat']);
+            $sheet->setCellValue('C' . $row, $item['kategori_pembayaran']);
+            $sheet->setCellValue('D' . $row, $item['type_pembayaran'] === '1' ? 'Online' : 'COD');
+            $sheet->setCellValue('E' . $row, $item['total']);
+            $sheet->setCellValue('F' . $row, $item['status'] === '0' ? 'Belum Bayar' : 'Sudah Bayar');
+            $row++;
+        }
+
+        $filename = 'laporan_transaksi.xlsx';
+
+        header('Content-Type: application/vnd.openxmlformats-officedocument.spreadsheetml.sheet');
+        header('Content-Disposition: attachment;filename="' . $filename . '"');
+        header('Cache-Control: max-age=0');
+
+        $writer = new Xlsx($spreadsheet);
+        $writer->save('php://output');
     }
 
     public function index()

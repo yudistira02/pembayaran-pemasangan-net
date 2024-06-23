@@ -107,7 +107,7 @@ class PelangganController extends BaseController
         if ($this->request->getMethod() === 'POST') {
             $validation = \Config\Services::validation();
             $validation->setRules([
-                'nomor_whatsapp' => 'required',
+                'nomor_whatsapp' => 'required|regex_match[/^08[1-9][0-9]{8,12}$/]',
                 'geolocation' => 'required',
                 'paket' => 'required',
                 'foto_diri' => 'uploaded[foto_diri]|max_size[foto_diri,1024]|is_image[foto_diri]|mime_in[foto_diri,image/jpg,image/jpeg]',
@@ -181,8 +181,8 @@ class PelangganController extends BaseController
                 $this->jadwalModel->insert($data_jadwal);
             }
 
+            return redirect()->back()->with('success', 'Berhasil melengkapi informasi! Silahkan login kembali.');
             session()->destroy();
-            return redirect()->to('/login')->with('success', 'Berhasil melengkapi informasi! Silahkan login kembali.');
         }
 
         return view('home/pelanggan/insertInformasi', [

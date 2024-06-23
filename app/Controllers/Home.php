@@ -59,7 +59,7 @@ class Home extends BaseController
         $findJadwal = $jadwal->where('pelanggan_id', $findPelanggan['id'])->where('type_jadwal', 'instalasi_baru')->first();
         return view('home/profile', [
         //dd([
-            'title' => 'Update Profile',
+            'title' => 'Profile',
             'data' => $model->where('id', $id)->first(),
             'pemasangan' => $findPelanggan,
             'jadwal' => $findJadwal,

@@ -6,7 +6,7 @@
         <div class="w-full">
             <div class="text-4xl font-semibold mb-5"><?= $title ?></div>
             <?= $this->include('components/flash') ?>
-            <div class="py-5 w-full">
+            <div class="w-full">
                 <form action="<?= base_url('home/profile/'. session()->id) ?>" method="POST">
                     <div class="block">
                         <div class="w-full mt-5">
@@ -53,8 +53,9 @@
             </div>
         </div>
         <div class="w-full">
+            <div class="text-4xl font-semibold mb-5">Status Layanan</div>
             <?php if(session()->userType === 'pelanggan'): ?>
-                <div>
+                <div class="my-5">
                     <?php if(!$pemasangan): ?>
                         <div class="bg-red-500 rounded-lg p-5 text-white flex justify-end">
                             <div>
@@ -63,7 +64,6 @@
                             </div>
                         </div>
                     <?php else: ?>
-                        
                         <div class="<?= $pemasangan['status'] === '1' ? 'bg-green-500' : 'bg-yellow-500' ?> rounded-lg p-5 text-white flex justify-between items-center">
                             <?php if($pemasangan['status'] === '1'): ?>
                                 <svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" stroke-width="1.5" stroke="currentColor" class="w-6 h-6 mr-3">
