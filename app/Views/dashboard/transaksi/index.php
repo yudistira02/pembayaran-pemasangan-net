@@ -16,9 +16,9 @@
     <div class="py-5">
         <div class="flex gap-3">
             <form action="<?= base_url('dashboard/transaksi/export') ?>" method="POST">
-                <input type="date" name="startDate" class="bg-gray-200 focus:outline-none">
-                <input type="date" name="endDate" class="bg-gray-200 focus:outline-none">
-                <select name="format" class="bg-gray-200 focus:outline-none">
+                <input type="date" name="startDate" class="bg-gray-200 focus:outline-none px-3 py-2 rounded-lg">
+                <input type="date" name="endDate" class="bg-gray-200 focus:outline-none px-3 py-2 rounded-lg">
+                <select name="format" class="bg-gray-200 focus:outline-none px-3 py-2 rounded-lg">
                     <option value="pdf">PDF</option>
                     <option value="excel">Excel</option>
                 </select>

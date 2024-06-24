@@ -43,7 +43,7 @@
                     <th>Kategori Pembayaran</th>
                     <th>Tipe Pembayaran</th>
                     <th>Total</th>
-                    <th>Status</th>
+                    <th>Tanggal Pembayaran</th>
                 </tr>
             </thead>
             <tbody>
@@ -59,7 +59,7 @@
                     <td><?= $item['kategori_pembayaran'] === 'bulanan' ? 'Bulanan' : 'Instalasi Baru' ?></td>
                     <td><?= $item['type_pembayaran'] === '1' ? 'Online' : 'COD (Cash On Delivery)' ?></td>
                     <td><?= number_format($item['total'], 0, ',', '.') ?></td>
-                    <td><?= $item['status'] === '0' ? 'Belum Bayar' : 'Sudah Bayar' ?></td>
+                    <td><?= $item['updated_at']; ?></td>
                 </tr>
                 <?php endforeach; ?>
                 <tr>

@@ -13,7 +13,7 @@ class Transaksi extends Model
     protected $useSoftDeletes   = false;
     protected $protectFields    = true;
     protected $allowedFields    = [
-        'pelanggan_id', 'total', 'status', 'type_pembayaran', 'kategori_pembayaran'
+        'pelanggan_id', 'total', 'status', 'type_pembayaran', 'kategori_pembayaran', 'updated_at'
     ];
 
     protected bool $allowEmptyInserts = false;

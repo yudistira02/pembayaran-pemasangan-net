@@ -47,6 +47,7 @@ class TransaksiController extends BaseController
                                 ->join('users', 'users.id = pelanggan.user_id')
                                 ->where('transaksi.created_at >=', $startDate)
                                 ->where('transaksi.created_at <=', $endDate)
+                                ->where('transaksi.status', '1')
                                 ->findAll();
 
         if ($format == 'pdf') {
@@ -84,17 +85,31 @@ class TransaksiController extends BaseController
         $sheet->setCellValue('C1', 'Kategori Pembayaran');
         $sheet->setCellValue('D1', 'Tipe Pembayaran');
         $sheet->setCellValue('E1', 'Total');
-        $sheet->setCellValue('F1', 'Status');
+        $sheet->setCellValue('F1', 'Tanggal Pembayaran');
+
+        $sheet->getStyle('A1:F1')->getFont()->setBold(true);
 
         $row = 2;
+        $totalAmount = 0;
         foreach ($data as $item) {
             $sheet->setCellValue('A' . $row, $item['name']);
             $sheet->setCellValue('B' . $row, $item['alamat']);
             $sheet->setCellValue('C' . $row, $item['kategori_pembayaran']);
             $sheet->setCellValue('D' . $row, $item['type_pembayaran'] === '1' ? 'Online' : 'COD');
             $sheet->setCellValue('E' . $row, $item['total']);
-            $sheet->setCellValue('F' . $row, $item['status'] === '0' ? 'Belum Bayar' : 'Sudah Bayar');
+            $sheet->setCellValue('F' . $row, $item['updated_at']);
+
+            $totalAmount += $item['total'];
             $row++;
+        }
+
+        $sheet->setCellValue('D' . $row, 'Total');
+        $sheet->setCellValue('E' . $row, $totalAmount);
+
+        $sheet->getStyle('D' . $row . ':E' . $row)->getFont()->setBold(true);
+
+        foreach (range('A', 'F') as $columnID) {
+            $sheet->getColumnDimension($columnID)->setAutoSize(true);
         }
 
         $filename = 'laporan_transaksi.xlsx';
@@ -268,12 +283,9 @@ class TransaksiController extends BaseController
     function generateUniqueNumericId($model, $min = 100000, $max = 999999)
     {
         do {
-            // Generate a unique numeric ID using random_int
             $uniqueId = random_int($min, $max);
-
-            // Check the database to see if this ID already exists
             $exists = $model->where('pelanggan_id', $uniqueId)->first();
-        } while ($exists); // Repeat if the ID already exists
+        } while ($exists); 
 
         return $uniqueId;
     }
@@ -293,6 +305,7 @@ class TransaksiController extends BaseController
 
             $this->transaksiModel->update($transaksi['id'], [
                 'status' => '1',
+                'updated_at' => date('Y-m-d H:i:s')
             ]);
 
             $this->pelangganModel->update($findPelanggan['id'], [
